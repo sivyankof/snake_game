@@ -29,15 +29,20 @@ function gameLoop() {
     // конец примера
     setTimeout(gameLoop, TIME_INTERVAL);
 
-    // moveUserTo(USER.direction);
     moveUserTo(USER.direction);
 }
 
 document.addEventListener('keydown', (e) => {
     const target = e.keyCode;
-    if (Object.values(USER.KEYS).includes(e.keyCode)) {
-        const pressKey = Object.entries(USER.KEYS).find((key) => key.includes(target));
+    const pressKey = Object.entries(USER.KEYS).find((key) => key.includes(target));
 
+    if (target === 38 && USER.direction !== 'DOWN') {
+        USER.direction = pressKey[0];
+    } else if (target === 40 && USER.direction !== 'UP') {
+        USER.direction = pressKey[0];
+    } else if (target === 37 && USER.direction !== 'RIGHT') {
+        USER.direction = pressKey[0];
+    } else if (target === 39 && USER.direction !== 'LEFT') {
         USER.direction = pressKey[0];
     }
 });
@@ -47,33 +52,17 @@ document.addEventListener('keydown', (e) => {
 // https://prognote.ru/web-dev/front-end/how-to-make-a-snake-on-js-with-canvas/
 
 function moveUserTo(direction) {
-    if (direction === 'UP' && direction !== 'DOWN') {
-        USER.cells.pop();
+    USER.cells.pop();
+    let head = Object.assign({}, USER.cells[0]);
 
-        let head = Object.assign({}, USER.cells[0]);
+    if (direction === 'UP') {
         head.y -= 1;
-        USER.cells.unshift(head);
-    } else if (direction === 'DOWN' && direction !== 'UP') {
-        USER.cells.pop();
-
-        let head = Object.assign({}, USER.cells[0]);
+    } else if (direction === 'DOWN') {
         head.y += 1;
-        USER.cells.unshift(head);
-    } else if (direction === 'LEFT' && direction !== 'RIGHT') {
-        USER.cells.pop();
-
-        let head = Object.assign({}, USER.cells[0]);
+    } else if (direction === 'LEFT') {
         head.x -= 1;
-        USER.cells.unshift(head);
-    } else if (direction === 'RIGHT' && direction !== 'LEFT') {
-        USER.cells.pop();
-
-        console.log(USER.cells[0]);
-
-        let head = Object.assign({}, USER.cells[0]);
+    } else if (direction === 'RIGHT') {
         head.x += 1;
-
-        console.log(head);
-        USER.cells.unshift(head);
     }
+    USER.cells.unshift(head);
 }
